@@ -1,1 +1,3 @@
-# BASIC-GAME-OF-LIFE
+# Game of Life
+
+

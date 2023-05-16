@@ -1,0 +1,125 @@
+*
+    GIT.FILENAME = 'GAME.OF.LIFE'
+    GIT.REPO = 'https://github.com/Krowemoh/BASIC-GAME-OF-LIFE'
+*
+    EQU TRUE TO 1
+    EQU FALSE TO 0
+*
+    EQU X.MAX TO 40
+    EQU Y.MAX TO 30
+*
+    CLEAR.REST.OF.SCREEN = @(-3)
+*
+    DIM ARRAY(X.MAX,Y.MAX)
+    DIM UNIVERSE(X.MAX,Y.MAX)
+    MAT UNIVERSE  = '0'
+*
+    SEED = RND(X.MAX*Y.MAX) + 1
+*
+    FOR I = 1 TO SEED
+        UNIVERSE(RND(X.MAX)+1,RND(Y.MAX)+1) = TRUE
+    NEXT I
+*
+    DONE = FALSE
+*
+    LOOP UNTIL FALSE DO
+*
+        MAT ARRAY = MAT UNIVERSE
+        GOSUB TICK
+        GOSUB DRAW.ARRAY
+*
+        INPUTIF EXIT.WATCH THEN
+            EXIT
+        END ELSE NAP 400
+    REPEAT
+*
+    STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TICK:NULL
+*
+    FOR Y = 1 TO Y.MAX
+        FOR X = 1 TO X.MAX
+            GOSUB GET.NEIGHBORS
+*
+            LIFE = SUM(NEIGHBORS)
+*
+            IF ARRAY(X,Y) = TRUE THEN
+                IF LIFE = 2 OR LIFE = 3 THEN
+                    UNIVERSE(X,Y) = TRUE
+                END ELSE
+                    UNIVERSE(X,Y) = FALSE
+                END
+            END ELSE
+                IF LIFE = 3 THEN
+                    UNIVERSE(X,Y) = TRUE
+                END
+            END
+*
+        NEXT J
+    NEXT I
+*
+    RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+GET.NEIGHBORS:NULL
+*
+    NEIGHBORS = ''
+*
+    IF X > 1 AND Y > 1 THEN
+        NEIGHBORS<1,-1> = ARRAY(X-1,Y-1)
+    END
+    IF X > 1 THEN
+        NEIGHBORS<1,-1> = ARRAY(X-1,Y)
+    END
+    IF X > 1 AND Y < Y.MAX THEN
+        NEIGHBORS<1,-1> = ARRAY(X-1,Y+1)
+    END
+*
+    IF X < X.MAX AND Y < Y.MAX THEN
+        NEIGHBORS<1,-1> = ARRAY(X+1,Y+1)
+    END
+    IF X < X.MAX THEN
+        NEIGHBORS<1,-1> = ARRAY(X+1,Y)
+    END
+    IF X < X.MAX AND Y > 1 THEN
+        NEIGHBORS<1,-1> = ARRAY(X+1,Y-1)
+    END
+*
+    IF Y > 1 THEN
+        NEIGHBORS<1,-1> = ARRAY(X,Y-1)
+    END
+    IF Y < Y.MAX THEN
+        NEIGHBORS<1,-1> = ARRAY(X,Y+1)
+    END
+*
+    RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+DRAW.ARRAY:NULL
+*
+    PRINT @(0,0) : CLEAR.REST.OF.SCREEN
+*
+    DOT = '€¢'
+    SQUARE = 'â– '
+*
+    FOR I = 1 TO Y.MAX
+        FOR J = 1 TO X.MAX
+            IF ARRAY(J,I) = 1 THEN
+                PRINT SQUARE 'L#4':
+            END ELSE
+                PRINT DOT 'L#4' :
+            END
+        NEXT J
+        PRINT
+    NEXT I
+*
+    RETURN
+*
+* END OF PROGRAM
+*
+    END
+*
